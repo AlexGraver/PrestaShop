@@ -22,7 +22,7 @@ public class BasePage {
         actions = new Actions(driver);
     }
 
-    public static void openUrl(String url){
+    public void openUrl(String url){
         driver.get(url);
     }
 
@@ -38,7 +38,29 @@ public class BasePage {
         waitHelper.sleep(milliseconds);
     }
 
+    protected WebElement waitUntilElementDisplayed(By locator){
+        return waitHelper.waitUntilElementDisplayed(locator);
+    }
 
+    protected WebElement waitUntilElementClickable(By locator){
+        return waitHelper.waitUntilElementClickable(locator);
+    }
+
+    protected void jsClick(WebElement element){
+        jsExecutor.executeAsyncScript("arguments[0].click()", element);
+    }
+
+    protected WebElement findElement(By locator){
+        return waitHelper.waitUntilElementIsPresentInDOM(locator);
+    }
+
+    protected void moveMouseToElementAndClick(WebElement element){
+        actions.moveToElement(element).click().release().build().perform();
+    }
+
+    protected void waitIframeIsAvailableAndSwitchToIt(By iFrame){
+        waitHelper.waitIframeAvailable(iFrame);
+    }
 
 
 }
