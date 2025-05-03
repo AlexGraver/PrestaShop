@@ -62,6 +62,12 @@ public class BasePage {
         waitHelper.waitIframeAvailable(iFrame);
     }
 
+    protected void setTextIntoElement(By element, String text){
+        WebElement field = findElement(element);
+            field.clear();
+            field.sendKeys(text);
+    }
+
 
 }
 
