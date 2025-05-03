@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '2.11.2'
 }
 
 group = 'org.example'
@@ -10,10 +11,32 @@ repositories {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    //TestNG
+    implementation("org.apache.groovy:groovy-testng:5.0.0-alpha-12")
+    testImplementation("org.apache.groovy:groovy-testng:5.0.0-alpha-12")
+
+    //Allure
+    implementation 'org.seleniumhq.selenium:selenium-java:4.31.0'
+    implementation 'io.qameta.allure:allure-testng:2.25.0'
+
+    //Owner library for work with property files
+    implementation 'org.aeonbits.owner:owner:1.0.12'
+
+    //logger dependencies
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'ch.qos.logback:logback-classic:1.2.11'
+
+    implementation 'org.seleniumhq.selenium:selenium-edge-driver:4.20.0'
 }
 
 test {
-    useJUnitPlatform()
+    useTestNG()
+}
+
+allure {
+    adapter {
+        autoconfigure = true
+        version = '2.25.0'
+    }
 }
