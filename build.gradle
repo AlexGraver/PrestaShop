@@ -27,6 +27,9 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.2.11'
 
     implementation 'org.seleniumhq.selenium:selenium-edge-driver:4.20.0'
+
+    //fake data generator
+    implementation 'net.datafaker:datafaker:2.0.2'
 }
 
 test {
