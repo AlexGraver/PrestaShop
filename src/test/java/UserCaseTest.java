@@ -12,12 +12,13 @@ public class UserCaseTest extends BaseTest {
                 .selectGender(CreateAccountPage.MALE)
                 .setFirstName("Alex")
                 .setLastName("Test")
-                .setEmail("email")
+                .setEmail("email@email.lv")
                 .setPassword("TestPasswordStrongVery123")
                 .setBirthday("02/20/2000")
                 .agreeReceivePartnerOffers()
                 .agreeTermsAndConditions()
                 .agreeSignUpNewsletter()
-                .agreeCustomerDataPolicy();
+                .agreeCustomerDataPolicy()
+                .saveAccount();
     }
 }

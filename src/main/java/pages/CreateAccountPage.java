@@ -17,10 +17,10 @@ public class CreateAccountPage extends BasePage {
     public static final By EMAIL = By.xpath("//input[@id=\"field-email\"]");
     public static final By PASSWORD = By.xpath("//input[@id=\"field-password\"]");
     public static final By BIRTHDATE = By.xpath("//input[@id=\"field-birthday\"]");
-    public static final By RECEIVE_OFFERS_FROM_PARTNERS = By.xpath("//span[@class=\"custom-checkbox\"]/label/input[@name=\"optin\"]");
-    public static final By AGREE_TERMS_CONDITIONS = By.xpath("//input[@name=\"psgdpr\"]");
-    public static final By SIGN_UP_FOR_NEWSLETTER = By.xpath("//input[@name=\"newsletter\"]");
-    public static final By CUSTOMER_DATA_POLICY = By.xpath("//input[@name=\"customer_privacy\"]");
+    public static final By RECEIVE_OFFERS_FROM_PARTNERS = By.xpath("//input[@name=\"optin\"]/..");
+    public static final By AGREE_TERMS_CONDITIONS = By.xpath("//input[@name=\"psgdpr\"]/..");
+    public static final By SIGN_UP_FOR_NEWSLETTER = By.xpath("//input[@name=\"newsletter\"]/..");
+    public static final By CUSTOMER_DATA_POLICY = By.xpath("//input[@name=\"customer_privacy\"]/..");
     public static final By SAVE_FORM = By.xpath("//button[@data-link-action=\"save-customer\"]");
 
     public CreateAccountPage selectGender(By gender){
@@ -69,7 +69,13 @@ public class CreateAccountPage extends BasePage {
     }
 
     public CreateAccountPage agreeCustomerDataPolicy(){
+        waitUntilElementClickable(CUSTOMER_DATA_POLICY).click();
         return this;
+    }
+
+    public void saveAccount(){
+        waitUntilElementClickable(SAVE_FORM).click();
+        //return new HomePage(driver);
     }
 
 }
