@@ -68,6 +68,19 @@ public class BasePage {
             field.sendKeys(text);
     }
 
+    protected void setDomAttributeValue(WebElement element, String attribute, String value) {
+        jsExecutor.executeScript("arguments[0].setAttribute(arguments[1], arguments[2])", element, attribute, value);
+    }
+
+    protected void moveElementWithMouse(WebElement element, int horizontal, int vertical){
+        actions.clickAndHold(element).moveByOffset(horizontal, vertical).release().perform();
+    }
+
+    protected void scrollToElement(WebElement element){
+        //actions.scrollToElement(element).perform();
+        jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element);
+    }
+
 
 }
 
