@@ -2,6 +2,7 @@ package pages;
 
 import core.BasePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -19,6 +20,7 @@ public class HomeAccessoryPage extends BasePage {
     private static final By LEFT_SLIDER_HANDLE = By.xpath("(//a[@class=\"ui-slider-handle ui-state-default ui-corner-all\"])[1]");
     private static final By RIGHT_SLIDER_HANDLE = By.xpath("(//a[@class=\"ui-slider-handle ui-state-default ui-corner-all\"])[2]");
     private static final By PRODUCT_ITEM = By.xpath("//div[@class=\"js-product product col-xs-12 col-sm-6 col-xl-4\"]");
+    private static final By IFRAME_BODY = By.xpath("//iframe[@id=\"framelive\"]");
 
     public void setPriceFilter(int min, int max){
         sleep(2000);
@@ -67,6 +69,16 @@ public class HomeAccessoryPage extends BasePage {
     public ItemPage openRandomItemPage(){
         getFilteredItems().stream().findAny().get().click();
         return new ItemPage(driver);
+    }
+
+    public void waitForBody(){
+        try{
+            waitIframeIsAvailableAndSwitchToIt(IFRAME_BODY);
+        }catch (NoSuchElementException e){
+            driver.switchTo().defaultContent();
+            waitIframeIsAvailableAndSwitchToIt(IFRAME_BODY);
+            log.info("Page was opened twice, BODY iFrame reloaded");
+        }
     }
 
 }

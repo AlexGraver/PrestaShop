@@ -7,8 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import pages.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class UserCaseTest extends BaseTest {
@@ -23,10 +26,12 @@ public class UserCaseTest extends BaseTest {
     int filterMinPrice;
     int filterMaxPrice;
     double cumulativePrice;
+    SoftAssert softAssert;
 
     @BeforeMethod
     void setUp(){
         data = new RandomUserData();
+        softAssert = new SoftAssert();
         firstname = data.getFirstName();
         lastname = data.getLastName();
         email = data.getEmail();
@@ -56,7 +61,17 @@ public class UserCaseTest extends BaseTest {
         ProductSuccessAddPage productSuccessAddPage = addItemToCart(itemPage, 2);
 
         checkSubTotalPrice(productSuccessAddPage);
+
         productSuccessAddPage.continueShopping();
+
+        productSuccessAddPage.navigateBack();
+        homeAccessoryPage.waitForBody();
+        itemPage = homeAccessoryPage.openRandomItemPage();
+        productSuccessAddPage = addItemToCart(itemPage, 1);
+        checkSubTotalPrice(productSuccessAddPage);
+
+        assertAll();
+
 
     }
 
@@ -79,7 +94,7 @@ public class UserCaseTest extends BaseTest {
     void checkUserLogin(HomePage homePage){
         String actualName = homePage.getLoggedUserFullName();
         String expectedName = firstname + " " + lastname;
-        Assert.assertEquals(actualName, expectedName, "User Name incorrect");
+        softAssert.assertEquals(actualName, expectedName, "User Name incorrect");
         log.info("Login correct");
     }
 
@@ -93,23 +108,33 @@ public class UserCaseTest extends BaseTest {
         List<WebElement> items = homeAccessoryPage.getFilteredItems();
         for(WebElement item: items){
             double price = homeAccessoryPage.getItemPrice(item);
-            Assert.assertTrue(price<=filterMaxPrice && price >= filterMinPrice);
+            softAssert.assertTrue(price<=filterMaxPrice && price >= filterMinPrice);
         }
         log.info("All items prices are in selected filter range");
     }
 
     @Step
     private ProductSuccessAddPage addItemToCart(ItemPage itemPage, int quantity){
-        cumulativePrice = cumulativePrice + itemPage.getItemPrice()*quantity;
-        itemPage.setQuantity(quantity);
+        cumulativePrice = cumulativePrice + (itemPage.getItemPrice())*quantity;
+        if(quantity > 1){
+            itemPage.setQuantity(quantity);
+        }
         return itemPage.addToCart();
     }
 
     @Step
     private void checkSubTotalPrice(ProductSuccessAddPage productSuccessAddPage){
         double actualPrice = productSuccessAddPage.getSubTotalPrice();
-        Assert.assertTrue(actualPrice == cumulativePrice, "Price incorrect");
+        double calculatedPrice = BigDecimal.valueOf(cumulativePrice).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        softAssert.assertTrue(actualPrice == calculatedPrice,
+                "Price incorrect: " + actualPrice + "expected, but got: " + calculatedPrice);
         log.info("SubTotal price is correct");
     }
+
+    @Step
+    private void assertAll(){
+        softAssert.assertAll();
+    }
+
 
 }
