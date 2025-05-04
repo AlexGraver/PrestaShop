@@ -19,6 +19,8 @@ public class UserCaseTest extends BaseTest {
     String email;
     String password;
     String birthday;
+    int filterMinPrice;
+    int filterMaxPrice;
 
     @BeforeMethod
     void setUp(){
@@ -28,6 +30,8 @@ public class UserCaseTest extends BaseTest {
         email = data.getEmail();
         password = "TestPasswordStrongVery123";
         birthday = "02/20/2000";
+        filterMinPrice = 18;
+        filterMaxPrice = 23;
     }
 
     @Test
@@ -38,7 +42,7 @@ public class UserCaseTest extends BaseTest {
         HomePage homePage = createAccount(createAccountPage);
         checkUserLogin(homePage);
         HomeAccessoryPage homeAccessoryPage = openHomeAccessory(homePage);
-        homeAccessoryPage.setPriceFilter(18, 23);
+        homeAccessoryPage.setPriceFilter(filterMinPrice, filterMaxPrice);
         checkItemPricesIsCorrectlyFiltered(homeAccessoryPage);
     }
 
@@ -74,7 +78,7 @@ public class UserCaseTest extends BaseTest {
         List<WebElement> items = homeAccessoryPage.getFilteredItems();
         for(WebElement item: items){
             double price = homeAccessoryPage.getItemPrice(item);
-            Assert.assertTrue(price<=23 && price >= 18);
+            Assert.assertTrue(price<=filterMaxPrice && price >= filterMinPrice);
         }
     }
 
