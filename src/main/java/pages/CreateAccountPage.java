@@ -73,9 +73,9 @@ public class CreateAccountPage extends BasePage {
         return this;
     }
 
-    public void saveAccount(){
+    public HomePage saveAccount(){
         waitUntilElementClickable(SAVE_FORM).click();
-        //return new HomePage(driver);
+        return new HomePage(driver);
     }
 
 }
