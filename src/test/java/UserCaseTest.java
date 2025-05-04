@@ -34,7 +34,7 @@ public class UserCaseTest extends BaseTest {
                 .openCreateAccount();
         HomePage homePage = createAccount(createAccountPage);
         checkUserLogin(homePage);
-        openHomeAccessory(homePage).setPriceFilter(38, 41);
+        openHomeAccessory(homePage).setPriceFilter(18, 23);
     }
 
     @Step
