@@ -4,7 +4,6 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -23,6 +22,12 @@ public class UserCaseTest extends BaseTest {
     String email;
     String password;
     String birthday;
+    String address;
+    String city;
+    String phone;
+    String state;
+    String country;
+    String zipCode;
     int filterMinPrice;
     int filterMaxPrice;
     double cumulativePrice;
@@ -37,6 +42,12 @@ public class UserCaseTest extends BaseTest {
         email = data.getEmail();
         password = "TestPasswordStrongVery123";
         birthday = "02/20/2000";
+        address = "Baker Street";
+        city = "New York";
+        phone = "92304881085";
+        state = "New York";
+        country = "United States";
+        zipCode = "12345";
         filterMinPrice = 18;
         filterMaxPrice = 23;
         cumulativePrice = 0;
@@ -68,7 +79,12 @@ public class UserCaseTest extends BaseTest {
         homeAccessoryPage.waitForBody();
         itemPage = homeAccessoryPage.openRandomItemPage();
         productSuccessAddPage = addItemToCart(itemPage, 1);
+
         checkSubTotalPrice(productSuccessAddPage);
+
+        CartPage cartPage = productSuccessAddPage.proceedToCheckOut();
+        CheckoutAddressesPage checkoutAddressesPage = cartPage.checkout();
+        fillCheckoutAddressesPage(checkoutAddressesPage);
 
         assertAll();
 
@@ -129,6 +145,19 @@ public class UserCaseTest extends BaseTest {
         softAssert.assertTrue(actualPrice == calculatedPrice,
                 "Price incorrect: " + actualPrice + "expected, but got: " + calculatedPrice);
         log.info("SubTotal price is correct");
+    }
+
+    @Step
+    private void fillCheckoutAddressesPage(CheckoutAddressesPage checkoutAddressesPage){
+        checkoutAddressesPage.setFirstName(firstname)
+                .setLastName(lastname)
+                .setAddress(address)
+                .setCity(city)
+                .selectState(state)
+                .setZipCode(zipCode)
+                .selectCountry(country)
+                .setPhone(phone)
+                .clickContinueButton();
     }
 
     @Step

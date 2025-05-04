@@ -3,6 +3,7 @@ package core;
 import core.helpers.WaitHelper;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.lang.invoke.MethodHandles;
@@ -14,6 +15,7 @@ public class BasePage {
     private WaitHelper waitHelper;
     private JavascriptExecutor jsExecutor;
     private Actions actions;
+    private Select select;
     protected static WebDriver driver;
 
     public BasePage(WebDriver driver) {
@@ -86,6 +88,11 @@ public class BasePage {
 
     protected List<WebElement> findElements(By by) {
         return waitHelper.findElements(by);
+    }
+
+    protected void selectFromDropdown(By locator, String option){
+        select = new Select(findElement(locator));
+        select.selectByVisibleText(option);
     }
 
 
