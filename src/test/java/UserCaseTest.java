@@ -5,6 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.CreateAccountPage;
+import pages.HomeAccessoryPage;
 import pages.HomePage;
 
 public class UserCaseTest extends BaseTest {
@@ -33,6 +34,7 @@ public class UserCaseTest extends BaseTest {
                 .openCreateAccount();
         HomePage homePage = createAccount(createAccountPage);
         checkUserLogin(homePage);
+        openHomeAccessory(homePage);
     }
 
     @Step
@@ -55,6 +57,11 @@ public class UserCaseTest extends BaseTest {
         String actualName = homePage.getLoggedUserFullName();
         String expectedName = firstname + " " + lastname;
         Assert.assertEquals(actualName, expectedName);
+    }
+
+    @Step
+    private HomeAccessoryPage openHomeAccessory(HomePage homePage){
+        return homePage.openAccessoryPage().openHomeAccessoryPage();
     }
 
 

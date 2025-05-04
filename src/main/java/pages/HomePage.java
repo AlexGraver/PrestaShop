@@ -19,6 +19,8 @@ public class HomePage extends BasePage {
     private static final By IFRAME_BODY = By.xpath("//iframe[@id=\"framelive\"]");
     private static final By SIGN_IN = By.xpath("//div[@class=\"user-info\"]/a/i[@class=\"material-icons\"]");
     private static final By LOGGED_USER_NAME = By.xpath("//a[@class=\"account\"]");
+    private static final By ACCESSORIES = By.xpath("//li[@id=\"category-6\"]/a");
+
     public Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private void waitForBody(){
@@ -41,6 +43,7 @@ public class HomePage extends BasePage {
     }
 
     public AccessoryPage openAccessoryPage(){
+        waitUntilElementClickable(ACCESSORIES).click();
         return new AccessoryPage(driver);
     }
 }
