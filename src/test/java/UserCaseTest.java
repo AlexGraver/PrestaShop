@@ -1,12 +1,15 @@
 import baseTest.BaseTest;
 import core.helpers.RandomUserData;
 import io.qameta.allure.Step;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.CreateAccountPage;
 import pages.HomeAccessoryPage;
 import pages.HomePage;
+
+import java.util.List;
 
 public class UserCaseTest extends BaseTest {
 
@@ -34,7 +37,9 @@ public class UserCaseTest extends BaseTest {
                 .openCreateAccount();
         HomePage homePage = createAccount(createAccountPage);
         checkUserLogin(homePage);
-        openHomeAccessory(homePage).setPriceFilter(18, 23);
+        HomeAccessoryPage homeAccessoryPage = openHomeAccessory(homePage);
+        homeAccessoryPage.setPriceFilter(18, 23);
+        checkItemPricesIsCorrectlyFiltered(homeAccessoryPage);
     }
 
     @Step
@@ -64,6 +69,13 @@ public class UserCaseTest extends BaseTest {
         return homePage.openAccessoryPage().openHomeAccessoryPage();
     }
 
-
+    @Step
+    private void checkItemPricesIsCorrectlyFiltered(HomeAccessoryPage homeAccessoryPage){
+        List<WebElement> items = homeAccessoryPage.getFilteredItems();
+        for(WebElement item: items){
+            double price = homeAccessoryPage.getItemPrice(item);
+            Assert.assertTrue(price<=23 && price >= 18);
+        }
+    }
 
 }

@@ -5,16 +5,19 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class HomeAccessoryPage extends BasePage {
 
     public HomeAccessoryPage(WebDriver driver){
         super(driver);
     }
 
-    private static final By IFRAME_BODY = By.xpath("//iframe[@id=\"framelive\"]");
-    private static final By PRICE_SLIDER = By.xpath("//*[@class=\"ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all\"]");
     private static final By LEFT_SLIDER_HANDLE = By.xpath("(//a[@class=\"ui-slider-handle ui-state-default ui-corner-all\"])[1]");
     private static final By RIGHT_SLIDER_HANDLE = By.xpath("(//a[@class=\"ui-slider-handle ui-state-default ui-corner-all\"])[2]");
+    private static final By PRODUCT_ITEM = By.xpath("//div[@class=\"js-product product col-xs-12 col-sm-6 col-xl-4\"]");
 
     public void setPriceFilter(int min, int max){
         sleep(2000);
@@ -41,5 +44,21 @@ public class HomeAccessoryPage extends BasePage {
         return Integer.valueOf(offset);
     }
 
+    public List<WebElement> getFilteredItems(){
+        return findElements(PRODUCT_ITEM);
+    }
+
+    public double getItemPrice(WebElement element){
+        double priceInt = 0.0;
+        String text = element.getText();
+        Pattern pattern = Pattern.compile("€(\\d+\\.\\d+)");
+        Matcher matcher = pattern.matcher(text);
+
+        if (matcher.find()) {
+            String price = matcher.group(1);
+            priceInt = Double.valueOf(price);
+        }
+        return priceInt;
+    }
 
 }

@@ -3,9 +3,12 @@ package core;
 import core.helpers.WaitHelper;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BasePage {
 
@@ -79,6 +82,10 @@ public class BasePage {
     protected void scrollToElement(WebElement element){
         //actions.scrollToElement(element).perform();
         jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element);
+    }
+
+    protected List<WebElement> findElements(By by) {
+        return waitHelper.findElements(by);
     }
 
 
