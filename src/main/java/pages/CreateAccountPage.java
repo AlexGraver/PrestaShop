@@ -75,6 +75,7 @@ public class CreateAccountPage extends BasePage {
 
     public HomePage saveAccount(){
         waitUntilElementClickable(SAVE_FORM).click();
+        log.info("Account created");
         return new HomePage(driver);
     }
 

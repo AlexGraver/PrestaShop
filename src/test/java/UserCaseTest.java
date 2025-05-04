@@ -2,17 +2,18 @@ import baseTest.BaseTest;
 import core.helpers.RandomUserData;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import pages.CreateAccountPage;
-import pages.HomeAccessoryPage;
-import pages.HomePage;
+import pages.*;
 
 import java.util.List;
 
 public class UserCaseTest extends BaseTest {
 
+    private static final Logger log = LoggerFactory.getLogger(UserCaseTest.class);
     RandomUserData data;
     String firstname;
     String lastname;
@@ -21,6 +22,7 @@ public class UserCaseTest extends BaseTest {
     String birthday;
     int filterMinPrice;
     int filterMaxPrice;
+    double cumulativePrice;
 
     @BeforeMethod
     void setUp(){
@@ -32,6 +34,8 @@ public class UserCaseTest extends BaseTest {
         birthday = "02/20/2000";
         filterMinPrice = 18;
         filterMaxPrice = 23;
+        cumulativePrice = 0;
+
     }
 
     @Test
@@ -40,10 +44,20 @@ public class UserCaseTest extends BaseTest {
                 .openLoginPage()
                 .openCreateAccount();
         HomePage homePage = createAccount(createAccountPage);
+
         checkUserLogin(homePage);
+
         HomeAccessoryPage homeAccessoryPage = openHomeAccessory(homePage);
         homeAccessoryPage.setPriceFilter(filterMinPrice, filterMaxPrice);
+
         checkItemPricesIsCorrectlyFiltered(homeAccessoryPage);
+
+        ItemPage itemPage = homeAccessoryPage.openRandomItemPage();
+        ProductSuccessAddPage productSuccessAddPage = addItemToCart(itemPage, 2);
+
+        checkSubTotalPrice(productSuccessAddPage);
+        productSuccessAddPage.continueShopping();
+
     }
 
     @Step
@@ -65,7 +79,8 @@ public class UserCaseTest extends BaseTest {
     void checkUserLogin(HomePage homePage){
         String actualName = homePage.getLoggedUserFullName();
         String expectedName = firstname + " " + lastname;
-        Assert.assertEquals(actualName, expectedName);
+        Assert.assertEquals(actualName, expectedName, "User Name incorrect");
+        log.info("Login correct");
     }
 
     @Step
@@ -80,6 +95,21 @@ public class UserCaseTest extends BaseTest {
             double price = homeAccessoryPage.getItemPrice(item);
             Assert.assertTrue(price<=filterMaxPrice && price >= filterMinPrice);
         }
+        log.info("All items prices are in selected filter range");
+    }
+
+    @Step
+    private ProductSuccessAddPage addItemToCart(ItemPage itemPage, int quantity){
+        cumulativePrice = cumulativePrice + itemPage.getItemPrice()*quantity;
+        itemPage.setQuantity(quantity);
+        return itemPage.addToCart();
+    }
+
+    @Step
+    private void checkSubTotalPrice(ProductSuccessAddPage productSuccessAddPage){
+        double actualPrice = productSuccessAddPage.getSubTotalPrice();
+        Assert.assertTrue(actualPrice == cumulativePrice, "Price incorrect");
+        log.info("SubTotal price is correct");
     }
 
 }

@@ -33,7 +33,7 @@ public class BasePage {
         return driver.getCurrentUrl();
     }
 
-    protected void navigateBack(){
+    public void navigateBack(){
         driver.navigate().back();
     }
 

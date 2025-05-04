@@ -13,6 +13,7 @@ public class HomeAccessoryPage extends BasePage {
 
     public HomeAccessoryPage(WebDriver driver){
         super(driver);
+        log.info("HomeAccessoryPage opened");
     }
 
     private static final By LEFT_SLIDER_HANDLE = By.xpath("(//a[@class=\"ui-slider-handle ui-state-default ui-corner-all\"])[1]");
@@ -36,6 +37,8 @@ public class HomeAccessoryPage extends BasePage {
 
         moveElementWithMouse(findElement(LEFT_SLIDER_HANDLE), leftOffset, 0);
         moveElementWithMouse(findElement(RIGHT_SLIDER_HANDLE), -rightOffset, 0);
+
+        sleep(2000);
     }
 
     private int getElementActualOffset(By locator){
@@ -59,6 +62,11 @@ public class HomeAccessoryPage extends BasePage {
             priceInt = Double.valueOf(price);
         }
         return priceInt;
+    }
+
+    public ItemPage openRandomItemPage(){
+        getFilteredItems().stream().findAny().get().click();
+        return new ItemPage(driver);
     }
 
 }
