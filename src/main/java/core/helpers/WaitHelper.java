@@ -6,6 +6,10 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.invoke.MethodHandles;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +20,8 @@ public class WaitHelper {
     private WebDriverWait wait;
     private FluentWait<WebDriver> fluentWait;
     private Configs configs = ConfigFactory.create(Configs.class);
+    public Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
 
 
     public WaitHelper(WebDriver driver){
@@ -70,6 +76,7 @@ public class WaitHelper {
             list = fluentWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
         } catch (TimeoutException e) {
             list = new ArrayList<>();
+            log.info("No any elements found");
         }
         return list;
     }
