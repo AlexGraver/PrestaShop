@@ -22,6 +22,8 @@ Project has one e2e test to check Shop (http://demo.prestashop.com) main flow fr
 IntellijIdia: 
 - open test -> java -> UserCaseTest
 - Run UserTestCase
+- open Allure report: .\gradlew allureServe
+
 
 Terminal:
 - run test: .\gradlew clean test
