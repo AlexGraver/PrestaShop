@@ -30,6 +30,9 @@ public class ItemPage extends BasePage {
                 .replace("€", "")
                 .replace("\u00A0", "")
                 .trim();
+        if(price.contains("€")){
+            price.replace("€", "");
+        }
         return Double.valueOf(price);
     }
 
