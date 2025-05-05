@@ -16,8 +16,8 @@ dependencies {
     testImplementation 'org.testng:testng:7.10.1'
 
     //Allure
-    implementation 'org.seleniumhq.selenium:selenium-java:4.31.0'
-    implementation 'io.qameta.allure:allure-testng:2.25.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.31.0'
+    testImplementation 'io.qameta.allure:allure-testng:2.25.0'
 
     //Owner library for work with property files
     implementation 'org.aeonbits.owner:owner:1.0.12'
@@ -26,7 +26,8 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:1.7.36'
     implementation 'ch.qos.logback:logback-classic:1.2.11'
 
-    implementation 'org.seleniumhq.selenium:selenium-edge-driver:4.20.0'
+    //Selenium
+    implementation 'org.seleniumhq.selenium:selenium-java:4.31.0'
 
     //fake data generator
     implementation 'net.datafaker:datafaker:2.0.2'
@@ -34,6 +35,7 @@ dependencies {
 
 test {
     useTestNG()
+    finalizedBy 'allureReport'
 }
 
 allure {

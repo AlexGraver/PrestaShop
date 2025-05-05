@@ -51,7 +51,7 @@ public class BasePage {
     }
 
     protected void jsClick(WebElement element){
-        jsExecutor.executeAsyncScript("arguments[0].click()", element);
+        jsExecutor.executeScript("arguments[0].click()", element);
     }
 
     protected WebElement findElement(By locator){
@@ -82,8 +82,7 @@ public class BasePage {
     }
 
     protected void scrollToElement(WebElement element){
-        //actions.scrollToElement(element).perform();
-        jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element);
+        actions.scrollToElement(element).perform();
     }
 
     protected List<WebElement> findElements(By by) {
