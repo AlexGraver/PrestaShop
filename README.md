@@ -15,5 +15,19 @@ Project has one e2e test to check Shop (http://demo.prestashop.com) main flow fr
 - Tools: Gradle, Allure
 
 ## Deploy
-
+- IntellijIdia -> File -> New -> Project from version control -> repository URL
+- copy URL -> Clone
+  
 ## Test run
+IntellijIdia: 
+- open test -> java -> UserCaseTest
+- Run UserTestCase
+
+Terminal:
+- run test: .\gradlew clean test
+- create Allure report: .\gradlew allureReport
+- open Allure report: .\gradlew allureServe
+
+
+
+
