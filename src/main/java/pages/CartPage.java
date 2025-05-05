@@ -14,6 +14,7 @@ public class CartPage extends BasePage {
 
     public CheckoutAddressesPage checkout(){
         waitUntilElementClickable(PROCEED_TO_CHECKOUT_BUTTON).click();
+        log.info("CheckOut started");
         return new CheckoutAddressesPage(driver);
     }
 }

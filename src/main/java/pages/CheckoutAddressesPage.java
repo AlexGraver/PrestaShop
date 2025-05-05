@@ -62,6 +62,7 @@ public class CheckoutAddressesPage extends BasePage {
 
     public ShippingMethodPage clickContinueButton() {
         waitUntilElementClickable(CONTINUE_BUTTON).click();
+        log.info("Address page form completed");
         return new ShippingMethodPage(driver);
     }
 

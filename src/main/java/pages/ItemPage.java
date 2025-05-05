@@ -15,11 +15,12 @@ public class ItemPage extends BasePage {
     public static final By ITEM_PRICE = By.xpath("//span[@class=\"current-price-value\"]");
 
     public void setQuantity(int quantity){
-        setTextIntoElement(QUANTITY, String.valueOf(quantity));
+        setTextIntoElement(QUANTITY, String.valueOf(quantity));;
     }
 
     public ProductSuccessAddPage addToCart(){
         waitUntilElementClickable(ADD_TO_CART_BUTTON).click();
+        log.info("Product added to cart");
         return new ProductSuccessAddPage(driver);
     }
 

@@ -11,8 +11,14 @@ public class PaymentPage extends BasePage {
     }
 
     public static final By AGREE_TO_TERMS = By.xpath("//input[@type=\"checkbox\"]");
+    public static final By PLACE_ORDER_BUTTON = By.xpath("//div[@class=\"ps-shown-by-js\"]/button");
 
-    public void agreeToTerms(){
+    public PaymentPage agreeToTerms(){
         waitUntilElementClickable(AGREE_TO_TERMS).click();
+        return this;
+    }
+
+    public void placeOrder(){
+        waitUntilElementClickable(PLACE_ORDER_BUTTON).click();
     }
 }

@@ -1,5 +1,6 @@
 import baseTest.BaseTest;
 import core.helpers.RandomUserData;
+import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -55,6 +56,7 @@ public class UserCaseTest extends BaseTest {
     }
 
     @Test
+    @Description("E2E user flow test case: account creation -> product order")
     void e2eTest(){
         CreateAccountPage createAccountPage = initUiTest()
                 .openLoginPage()
@@ -74,7 +76,6 @@ public class UserCaseTest extends BaseTest {
         checkSubTotalPrice(productSuccessAddPage);
 
         productSuccessAddPage.continueShopping();
-
         productSuccessAddPage.navigateBack();
         homeAccessoryPage.waitForBody();
         itemPage = homeAccessoryPage.openRandomItemPage();
@@ -84,14 +85,15 @@ public class UserCaseTest extends BaseTest {
 
         CartPage cartPage = productSuccessAddPage.proceedToCheckOut();
         CheckoutAddressesPage checkoutAddressesPage = cartPage.checkout();
-        fillCheckoutAddressesPage(checkoutAddressesPage);
+        ShippingMethodPage shippingMethodPage = fillCheckoutAddressesPage(checkoutAddressesPage);
+        PaymentPage paymentPage = selectShippingMethod(shippingMethodPage);
 
         assertAll();
 
 
     }
 
-    @Step
+    @Step("User account creation flow")
     private HomePage createAccount(CreateAccountPage createAccountPage){
         return createAccountPage.selectGender(CreateAccountPage.MALE)
                 .setFirstName(firstname)
@@ -106,7 +108,7 @@ public class UserCaseTest extends BaseTest {
                 .saveAccount();
     }
 
-    @Step
+    @Step("Check user is created and logged in")
     void checkUserLogin(HomePage homePage){
         String actualName = homePage.getLoggedUserFullName();
         String expectedName = firstname + " " + lastname;
@@ -114,12 +116,12 @@ public class UserCaseTest extends BaseTest {
         log.info("Login correct");
     }
 
-    @Step
+    @Step("Open Home accessory page")
     private HomeAccessoryPage openHomeAccessory(HomePage homePage){
         return homePage.openAccessoryPage().openHomeAccessoryPage();
     }
 
-    @Step
+    @Step("Check price filter is working correctly")
     private void checkItemPricesIsCorrectlyFiltered(HomeAccessoryPage homeAccessoryPage){
         List<WebElement> items = homeAccessoryPage.getFilteredItems();
         for(WebElement item: items){
@@ -129,27 +131,29 @@ public class UserCaseTest extends BaseTest {
         log.info("All items prices are in selected filter range");
     }
 
-    @Step
+    @Step("Add item to cart")
     private ProductSuccessAddPage addItemToCart(ItemPage itemPage, int quantity){
         cumulativePrice = cumulativePrice + (itemPage.getItemPrice())*quantity;
         if(quantity > 1){
             itemPage.setQuantity(quantity);
+            log.info("Product quantity was changed");
         }
+        log.info("Product quantity is default: 1");
         return itemPage.addToCart();
     }
 
-    @Step
+    @Step("Check price in product success window correctly calculated")
     private void checkSubTotalPrice(ProductSuccessAddPage productSuccessAddPage){
         double actualPrice = productSuccessAddPage.getSubTotalPrice();
         double calculatedPrice = BigDecimal.valueOf(cumulativePrice).setScale(2, RoundingMode.HALF_UP).doubleValue();
         softAssert.assertTrue(actualPrice == calculatedPrice,
-                "Price incorrect: " + actualPrice + "expected, but got: " + calculatedPrice);
+                "SubTotalPrice incorrect: " + actualPrice + "expected, but got: " + calculatedPrice);
         log.info("SubTotal price is correct");
     }
 
-    @Step
-    private void fillCheckoutAddressesPage(CheckoutAddressesPage checkoutAddressesPage){
-        checkoutAddressesPage.setFirstName(firstname)
+    @Step("Fill Checkout address form")
+    private ShippingMethodPage fillCheckoutAddressesPage(CheckoutAddressesPage checkoutAddressesPage){
+        return checkoutAddressesPage.setFirstName(firstname)
                 .setLastName(lastname)
                 .setAddress(address)
                 .setCity(city)
@@ -160,9 +164,19 @@ public class UserCaseTest extends BaseTest {
                 .clickContinueButton();
     }
 
-    @Step
+    @Step("Soft assert of all checks during test case flow")
     private void assertAll(){
         softAssert.assertAll();
+    }
+
+    @Step("Select shipping method")
+    private PaymentPage selectShippingMethod(ShippingMethodPage shippingMethodPage){
+        return shippingMethodPage.pressContinue();
+    }
+
+    @Step("Place order")
+    private void confirmPayment(PaymentPage paymentPage){
+        paymentPage.agreeToTerms().placeOrder();
     }
 
 
