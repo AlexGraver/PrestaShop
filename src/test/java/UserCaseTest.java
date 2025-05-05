@@ -87,6 +87,7 @@ public class UserCaseTest extends BaseTest {
         CheckoutAddressesPage checkoutAddressesPage = cartPage.checkout();
         ShippingMethodPage shippingMethodPage = fillCheckoutAddressesPage(checkoutAddressesPage);
         PaymentPage paymentPage = selectShippingMethod(shippingMethodPage);
+        confirmPayment(paymentPage);
 
         assertAll();
 
