@@ -15,7 +15,7 @@ public class ItemPage extends BasePage {
     public static final By ITEM_PRICE = By.xpath("//span[@class=\"current-price-value\"]");
 
     public void setQuantity(int quantity){
-        setTextIntoElement(QUANTITY, String.valueOf(quantity));;
+        setTextIntoElement(QUANTITY, String.valueOf(quantity));
     }
 
     public ProductSuccessAddPage addToCart(){
@@ -25,7 +25,7 @@ public class ItemPage extends BasePage {
     }
 
     public double getItemPrice(){
-        String price = findElement(ITEM_PRICE).getText().replace("€", "");
+        String price = findElement(ITEM_PRICE).getDomProperty("innerText").replace("€", "");
         return Double.valueOf(price);
     }
 
