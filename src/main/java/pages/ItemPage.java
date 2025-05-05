@@ -25,7 +25,11 @@ public class ItemPage extends BasePage {
     }
 
     public double getItemPrice(){
-        String price = findElement(ITEM_PRICE).getDomProperty("innerText").replace("€", "");
+        String price = findElement(ITEM_PRICE)
+                .getDomProperty("innerText")
+                .replace("€", "")
+                .replace("\u00A0", "")
+                .trim();
         return Double.valueOf(price);
     }
 
