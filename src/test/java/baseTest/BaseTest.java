@@ -19,10 +19,10 @@ public class BaseTest {
         return new HomePage(driver);
     }
 
-//    @AfterMethod
-//    public void tearDown(){
-//        TestDriver.quitDriver();
-//    }
+    @AfterMethod
+    public void tearDown(){
+        TestDriver.quitDriver();
+    }
 
 }
 
