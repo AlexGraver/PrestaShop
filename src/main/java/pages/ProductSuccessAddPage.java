@@ -20,7 +20,10 @@ public class ProductSuccessAddPage extends BasePage {
     }
 
     public double getSubTotalPrice(){
-        String price = waitUntilElementDisplayed(SUBTOTAL_PRICE).getText().replace("€", "");
+        String price = waitUntilElementDisplayed(SUBTOTAL_PRICE)
+                .getDomProperty("innerText")
+                .replaceAll("[^\\d.,]", "")
+                .trim();
         return Double.valueOf(price);
     }
 
